@@ -1,13 +1,11 @@
 
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:userdetailsapp/components/AlertDialogWidget.dart';
 import 'package:userdetailsapp/components/ProgressDialogWidget.dart';
 import 'package:userdetailsapp/components/RefreshFloatingActionButton.dart';
-import 'package:userdetailsapp/main.dart';
 import 'package:userdetailsapp/models/user.dart';
 import 'package:userdetailsapp/uikit/uiColors.dart';
 
@@ -39,14 +37,16 @@ class MyApp extends StatelessWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isVisible = true;
+  bool isProgressDialogShowing = false;
   List<User> users = [];
 
   /// _loadUsers void
   Future<void> _loadUsers() async {
-    Progressdialogwidget.showProgressDialog(context); //showing the progress dialog for the User
+    Progressdialogwidget.showProgressDialog(context);
     const URL = 'https://randomuser.me/api/?results=10'; // result is 10 Users
     try {
-      final http.Response response = await http.get(Uri.parse(URL));
+      final http.Response response = await http.get(Uri.parse('URL')); //if you take away the URL and make it Uri.parse()  the catch part will happen and the bug will appear
+
       final decode = json.decode(response.body);
       final List results = decode['results'];
 
@@ -63,10 +63,11 @@ class _MyHomePageState extends State<MyHomePage> {
       });
 
     } catch (exception) {
-      debugPrint('Error occured while fetching data: $exception');
-      _showDilaog(context);
+      debugPrint('Error occurred while fetching data: $exception');
+      _showDialog(context);
     } finally {
-      Navigator.of(context).pop();
+     Navigator.of(context).pop();
+     /* The problem is happening in the above line code, while it runs normally if the URL is available, */
     }
   }
   /// End of _loadUsers void
@@ -77,12 +78,14 @@ class _MyHomePageState extends State<MyHomePage> {
     _loadUsers(); //load users on app start
   }
 
+  ///  Show Progress Dialog
+
 
   ///  Alert dialog function
   ///  this void, implements an AlertDialog to fulfill the needs
   ///  in this case we using the AlertDialog to show an error Message
   ///
-  void _showDilaog(BuildContext context){
+  void _showDialog(BuildContext context){
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -213,4 +216,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
