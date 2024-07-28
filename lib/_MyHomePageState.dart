@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:http/http.dart' as http;
 import 'package:userdetailsapp/components/AlertDialogWidget.dart';
 import 'package:userdetailsapp/components/ProgressDialogWidget.dart';
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
@@ -42,21 +43,29 @@ class _MyHomePageState extends State<MyHomePage> {
 
   /// _loadUsers void
   Future<void> _loadUsers() async {
+    // Show the progress dialog
     Progressdialogwidget.showProgressDialog(context);
-    const URL = 'https://randomuser.me/api/?results=10'; // result is 10 Users
+    const String URL = 'https://randomuser.me/api/?results=10'; // Incorrect URL for testing
+
+
     try {
-      final http.Response response = await http.get(Uri.parse('URL')); //if you take away the URL and make it Uri.parse()  the catch part will happen and the bug will appear
+      final http.Response response = await http.get(Uri.parse(URL));
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load data');
+      }
 
       final decode = json.decode(response.body);
       final List results = decode['results'];
+      Navigator.of(context).pop();
 
       List<User> loadedUsers = results.map((json) => User.fromJson(json)).toList();
       debugPrint('list users is:  $loadedUsers');
 
-      //Filter Method
+      // Filter Method
       loadedUsers.sort((a, b) => a.name.compareTo(b.name));
 
-      //Initial application state
+      // Initial application state
       setState(() {
         users = loadedUsers;
         isVisible = false;
@@ -64,10 +73,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
     } catch (exception) {
       debugPrint('Error occurred while fetching data: $exception');
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop(); // Dismiss the progress dialog if it is still shown
+      }
       _showDialog(context);
-    } finally {
-     Navigator.of(context).pop();
-     /* The problem is happening in the above line code, while it runs normally if the URL is available, */
     }
   }
   /// End of _loadUsers void
@@ -77,9 +86,6 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _loadUsers(); //load users on app start
   }
-
-  ///  Show Progress Dialog
-
 
   ///  Alert dialog function
   ///  this void, implements an AlertDialog to fulfill the needs
