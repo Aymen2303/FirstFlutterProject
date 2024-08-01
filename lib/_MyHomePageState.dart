@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:http/http.dart' as http;
+import 'package:userdetailsapp/_UserDetails.dart';
 import 'package:userdetailsapp/components/AlertDialogWidget.dart';
 import 'package:userdetailsapp/components/ProgressDialogWidget.dart';
 import 'package:userdetailsapp/components/RefreshFloatingActionButton.dart';
@@ -45,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> _loadUsers() async {
     // Show the progress dialog
     Progressdialogwidget.showProgressDialog(context);
-    const String URL = 'https://randomuser.me/api/?results=10'; // Incorrect URL for testing
+    const String URL = 'https://randomuser.me/api/?results=10';
 
 
     try {
@@ -150,7 +151,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     side: const BorderSide(color: uiColors.selected, width: 1),
                   ),
                   child: SizedBox(
-                    width: 310,
+                    width: double.infinity,
                     height: 150,
                     child: Row(
                       children: <Widget>[
@@ -166,6 +167,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
+                       Expanded(
+                        child:
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
@@ -194,16 +197,26 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              const Text(
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(
+                                  context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UserDetails(user: user), //sending an object of type user
+                                    ),
+                                  );
+                                },
+                               child: const Text(
                                 'Click to show more information',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: uiColors.selected,
                                 ),
                               ),
+                              ),
                             ],
                           ),
-                        ),
+                        ),)
                       ],
                     ),
                   ),
