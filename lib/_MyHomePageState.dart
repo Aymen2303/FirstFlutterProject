@@ -48,7 +48,6 @@ class _MyHomePageState extends State<MyHomePage> {
     Progressdialogwidget.showProgressDialog(context);
     const String URL = 'https://randomuser.me/api/?results=10';
 
-
     try {
       final http.Response response = await http.get(Uri.parse(URL));
 
@@ -80,12 +79,14 @@ class _MyHomePageState extends State<MyHomePage> {
       _showDialog(context);
     }
   }
-  /// End of _loadUsers void
 
   @override
   void initState() {
     super.initState();
-    _loadUsers(); //load users on app start
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
+      _loadUsers();
+    });
   }
 
   ///  Alert dialog function
@@ -104,8 +105,6 @@ class _MyHomePageState extends State<MyHomePage> {
             })
     );
   }
-  ///
-  /// END ALERT DIALOG
 
   @override
   Widget build(BuildContext context) {

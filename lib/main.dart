@@ -6,8 +6,8 @@ import 'package:userdetailsapp/_MyHomePageState.dart';
 import 'package:userdetailsapp/controller/network_controller.dart';
 
 void main() {
-  Get.put(NetworkController());
   runApp(const MyApp());
+  Get.put(NetworkController());
 }
 
 class MyApp extends StatelessWidget {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
