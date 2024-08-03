@@ -1,6 +1,4 @@
-
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:http/http.dart' as http;
@@ -11,15 +9,12 @@ import 'package:userdetailsapp/components/RefreshFloatingActionButton.dart';
 import 'package:userdetailsapp/models/user.dart';
 import 'package:userdetailsapp/uikit/uiColors.dart';
 
-
-
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
-
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -42,9 +37,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isProgressDialogShowing = false;
   List<User> users = [];
 
-  /// _loadUsers void
   Future<void> _loadUsers() async {
-    // Show the progress dialog
     Progressdialogwidget.showProgressDialog(context);
     const String URL = 'https://randomuser.me/api/?results=10';
 
@@ -61,8 +54,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
       List<User> loadedUsers = results.map((json) => User.fromJson(json)).toList();
       debugPrint('list users is:  $loadedUsers');
-
-      // Filter Method
       loadedUsers.sort((a, b) => a.name.compareTo(b.name));
 
       // Initial application state
@@ -84,15 +75,11 @@ class _MyHomePageState extends State<MyHomePage> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_){
+    WidgetsBinding.instance.addPostFrameCallback((_){ //wait for the initState to finish before calling  _loadUsers()
       _loadUsers();
     });
   }
 
-  ///  Alert dialog function
-  ///  this void, implements an AlertDialog to fulfill the needs
-  ///  in this case we using the AlertDialog to show an error Message
-  ///
   void _showDialog(BuildContext context){
     showDialog(
         context: context,
@@ -201,7 +188,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   Navigator.push(
                                   context,
                                     MaterialPageRoute(
-                                        builder: (context) => UserDetails(user: user), //sending an object of type user
+                                        builder: (context) => UserDetails(user: user),
                                     ),
                                   );
                                 },

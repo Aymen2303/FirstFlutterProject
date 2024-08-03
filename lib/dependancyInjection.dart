@@ -1,4 +1,3 @@
-
 import 'package:get/get.dart';
 import 'package:userdetailsapp/controller/network_controller.dart';
 

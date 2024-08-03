@@ -21,7 +21,6 @@ class UserInformationBox extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8.0),
-
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +90,6 @@ class UserInformationBox extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
             ],
           ),
           const Divider(color: uiColors.notSelected),
