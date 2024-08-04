@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:userdetailsapp/components/birthdaybox.dart';
 import 'package:userdetailsapp/components/userInformationBox.dart';
@@ -8,7 +7,7 @@ import 'package:userdetailsapp/uikit/uiColors.dart';
 class UserDetails extends StatelessWidget {
   final User user;
 
-  const UserDetails({Key? key, required this.user}) : super(key: key);
+  const UserDetails({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {

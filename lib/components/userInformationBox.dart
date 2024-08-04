@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:userdetailsapp/uikit/uiColors.dart';
 
@@ -7,12 +6,12 @@ class UserInformationBox extends StatelessWidget {
   final String email;
   final String phoneNum;
 
-  UserInformationBox({
-    Key? key,
+  const UserInformationBox({
+    super.key,
     required this.name,
     required this.email,
     required this.phoneNum,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

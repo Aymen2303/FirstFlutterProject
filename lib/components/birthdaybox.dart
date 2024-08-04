@@ -1,15 +1,11 @@
-import 'dart:ui';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
 import 'package:userdetailsapp/uikit/uiColors.dart';
 
 class birthdayBox extends StatelessWidget{
 
   final String datetext;
 
-  birthdayBox({  //constructor
+  const birthdayBox({  //constructor
     super.key,
     required this.datetext,
   });
