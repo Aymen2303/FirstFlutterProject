@@ -1,17 +1,13 @@
-
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:http/http.dart' as http;
+import 'package:userdetailsapp/_UserDetails.dart';
 import 'package:userdetailsapp/components/AlertDialogWidget.dart';
 import 'package:userdetailsapp/components/ProgressDialogWidget.dart';
 import 'package:userdetailsapp/components/RefreshFloatingActionButton.dart';
-import 'package:userdetailsapp/main.dart';
 import 'package:userdetailsapp/models/user.dart';
 import 'package:userdetailsapp/uikit/uiColors.dart';
-
-
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key});
@@ -20,13 +16,12 @@ class MyHomePage extends StatefulWidget {
   _MyHomePageState createState() => _MyHomePageState();
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.white),
@@ -39,50 +34,53 @@ class MyApp extends StatelessWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isVisible = true;
+  bool isProgressDialogShowing = false;
   List<User> users = [];
 
-  /// _loadUsers void
   Future<void> _loadUsers() async {
-    Progressdialogwidget.showProgressDialog(context); //showing the progress dialog for the User
-    const URL = 'https://randomuser.me/api/?results=10'; // result is 10 Users
+    Progressdialogwidget.showProgressDialog(context);
+    const String URL = 'https://randomuser.me/api/?results=10';
+
     try {
       final http.Response response = await http.get(Uri.parse(URL));
+
+      if (response.statusCode != 200) {
+        throw Exception('Failed to load data');
+      }
+
       final decode = json.decode(response.body);
       final List results = decode['results'];
+      Navigator.of(context).pop();
 
       List<User> loadedUsers = results.map((json) => User.fromJson(json)).toList();
       debugPrint('list users is:  $loadedUsers');
-
-      //Filter Method
       loadedUsers.sort((a, b) => a.name.compareTo(b.name));
 
-      //Initial application state
+      // Initial application state
       setState(() {
         users = loadedUsers;
         isVisible = false;
       });
 
     } catch (exception) {
-      debugPrint('Error occured while fetching data: $exception');
-      _showDilaog(context);
-    } finally {
-      Navigator.of(context).pop();
+      debugPrint('Error occurred while fetching data: $exception');
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop(); // Dismiss the progress dialog if it is still shown
+      }
+      _showDialog(context);
     }
   }
-  /// End of _loadUsers void
 
   @override
   void initState() {
     super.initState();
-    _loadUsers(); //load users on app start
+
+    WidgetsBinding.instance.addPostFrameCallback((_){ //wait for the initState to finish before calling  _loadUsers()
+      _loadUsers();
+    });
   }
 
-
-  ///  Alert dialog function
-  ///  this void, implements an AlertDialog to fulfill the needs
-  ///  in this case we using the AlertDialog to show an error Message
-  ///
-  void _showDilaog(BuildContext context){
+  void _showDialog(BuildContext context){
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -94,8 +92,6 @@ class _MyHomePageState extends State<MyHomePage> {
             })
     );
   }
-  ///
-  /// END ALERT DIALOG
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     side: const BorderSide(color: uiColors.selected, width: 1),
                   ),
                   child: SizedBox(
-                    width: 310,
+                    width: double.infinity,
                     height: 150,
                     child: Row(
                       children: <Widget>[
@@ -157,6 +153,8 @@ class _MyHomePageState extends State<MyHomePage> {
                             ),
                           ),
                         ),
+                       Expanded(
+                        child:
                         Padding(
                           padding: const EdgeInsets.all(10.0),
                           child: Column(
@@ -185,16 +183,26 @@ class _MyHomePageState extends State<MyHomePage> {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              const Text(
+                              GestureDetector(
+                                onTap: (){
+                                  Navigator.push(
+                                  context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UserDetails(user: user),
+                                    ),
+                                  );
+                                },
+                               child: const Text(
                                 'Click to show more information',
                                 style: TextStyle(
                                   fontSize: 12.0,
                                   color: uiColors.selected,
                                 ),
                               ),
+                              ),
                             ],
                           ),
-                        ),
+                        ),)
                       ],
                     ),
                   ),
@@ -213,4 +221,3 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
-
