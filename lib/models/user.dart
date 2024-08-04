@@ -1,5 +1,7 @@
 // lib/models/user.dart
 
+import 'package:intl/intl.dart';
+
 class User {
   final String name;
   final String email;
@@ -38,5 +40,12 @@ class User {
   @override
   String toString() {
     return 'User{name: $name, email: $email, dateOfBirth: $dateOfBirth, phoneNum: $phoneNumber}';
+  }
+
+  ///function to showcase only the format we need
+  String toDate( String wrongDate){
+      DateTime rightDate = DateTime.parse(wrongDate);
+      String formatDate = DateFormat('yyyy-mm-dd').format(rightDate);
+      return formatDate.toString();
   }
 }

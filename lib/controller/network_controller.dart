@@ -1,7 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:userdetailsapp/uikit/uiColors.dart';
 
 class NetworkController extends GetxController {
   final Connectivity _connectivity = Connectivity();

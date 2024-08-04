@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:userdetailsapp/_MyHomePageState.dart';
+import 'package:userdetailsapp/dependancyInjection.dart';
 
 void main() {
+  Dependancyinjection.init();
   runApp(const MyApp());
 }
 
